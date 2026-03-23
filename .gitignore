@@ -1,0 +1,90 @@
+# ----------------------------
+# Python
+# ----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ----------------------------
+# Environment & Secrets
+# ----------------------------
+.env
+.env.*
+!.env.example
+
+# local config overrides
+config.local.*
+settings.local.*
+
+# ----------------------------
+# Logs
+# ----------------------------
+*.log
+logs/
+*.out
+*.err
+
+# ----------------------------
+# Database / Local storage
+# ----------------------------
+*.sqlite3
+*.db
+
+# ----------------------------
+# IDE / Editors
+# ----------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# ----------------------------
+# Testing / Coverage
+# ----------------------------
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ----------------------------
+# Docker
+# ----------------------------
+*.pid
+docker-compose.override.yml
+
+# ----------------------------
+# AI / Data / Temp
+# ----------------------------
+data/
+tmp/
+cache/
+uploads/
+
+# vector DB local storage (if used)
+qdrant_storage/
+
+# ----------------------------
+# Node (если вдруг появится UI)
+# ----------------------------
+node_modules/
+dist/
+
+# ----------------------------
+# Misc
+# ----------------------------
+*.bak
+*.tmp
