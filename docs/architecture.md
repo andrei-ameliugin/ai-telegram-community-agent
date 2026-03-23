@@ -45,6 +45,8 @@ Then one of two paths is used.
 
 Approval is optional and policy-driven.
 
+See @docs/approval.md for detailed approval workflow and data model.
+
 ## Transport Model
 
 The system currently uses Telegram polling.
