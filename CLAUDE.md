@@ -99,6 +99,7 @@ Never use LLM for:
 - Execution must be idempotent
 - Actions that do not require approval must execute directly
 - Admin chat is the approval interface, not the source of policy decisions
+- Approval workflow details are defined in @docs/approval.md
 
 ## Code Style
 
