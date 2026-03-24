@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from sqlalchemy import BigInteger, ForeignKey, String, Text
+from sqlalchemy import BigInteger, ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from infrastructure.db.base import Base
@@ -56,6 +56,9 @@ class BotChatBinding(Base):
     """Links a bot to a chat with a specific policy profile."""
 
     __tablename__ = "bot_chat_bindings"
+    __table_args__ = (
+        UniqueConstraint("bot_id", "chat_id", name="uq_bot_chat"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     bot_id: Mapped[int] = mapped_column(ForeignKey("bots.id"), nullable=False)
