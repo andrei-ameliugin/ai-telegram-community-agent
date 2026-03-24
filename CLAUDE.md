@@ -141,7 +141,16 @@ Prefer small, isolated changes over large rewrites.
 - Do NOT build webhook-specific core abstractions yet
 - Keep polling implementation production-usable but replaceable
 
+## Development Environment - IMPORTANT
 
+- All development must use a local Python virtual environment (venv)
+- Do NOT install dependencies globally
+- Assume project is run inside an activated virtual environment
+
+When suggesting commands:
+- prefer `python -m venv .venv`
+- use `.venv/bin/python` or activated shell
+- do not rely on system Python packages
 
 ## Security - IMPORTANT
 
