@@ -4,6 +4,9 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.mypy_cache/
+.ruff_cache/
+.pyre/
 
 # virtual environments
 .venv/
@@ -57,6 +60,7 @@ logs/
 # Testing / Coverage
 # ----------------------------
 .coverage
+.coverage.*
 htmlcov/
 .pytest_cache/
 
@@ -81,7 +85,6 @@ qdrant_storage/
 # Node (если вдруг появится UI)
 # ----------------------------
 node_modules/
-dist/
 
 # ----------------------------
 # Misc
