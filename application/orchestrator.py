@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 
+from application.context import Context, ContextResolver
 from domain.decisions import Decision
 from domain.events import MessageCreatedEvent
 from engines.moderation import ModerationEngine
@@ -15,14 +16,20 @@ class Orchestrator:
     """Central coordination layer.
 
     Routes events to engines and returns decisions.
+    Resolves context before calling engines.
     Does NOT execute actions — that responsibility belongs to the caller.
     """
 
-    def __init__(self, moderation_engine: ModerationEngine) -> None:
+    def __init__(
+        self,
+        moderation_engine: ModerationEngine,
+        context_resolver: ContextResolver,
+    ) -> None:
         self._moderation_engine = moderation_engine
+        self._context_resolver = context_resolver
 
     def handle_event(self, event: MessageCreatedEvent) -> Decision:
-        """Evaluate an event through the engine pipeline and return a decision."""
+        """Resolve context, evaluate event through engines, return decision."""
         logger.info(
             "Event received",
             extra={
@@ -35,7 +42,12 @@ class Orchestrator:
             },
         )
 
-        decision = self._moderation_engine.evaluate(event)
+        context = self._context_resolver.resolve(
+            bot_id=0,  # TODO: resolve from event when multi-bot is wired
+            chat_id=event.chat_id,
+        )
+
+        decision = self._moderation_engine.evaluate(event, context)
 
         logger.info(
             "Decision produced",
@@ -50,3 +62,4 @@ class Orchestrator:
         )
 
         return decision
+
