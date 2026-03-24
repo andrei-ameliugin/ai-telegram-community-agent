@@ -15,6 +15,32 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
 )
+
+
+class _StructuredFormatter(logging.Formatter):
+    """Appends extra fields as key=value pairs to log messages."""
+
+    _SKIP_KEYS = frozenset(
+        logging.LogRecord("", 0, "", 0, "", (), None).__dict__.keys()
+    )
+
+    def format(self, record: logging.LogRecord) -> str:
+        extra_fields = {
+            k: v
+            for k, v in record.__dict__.items()
+            if k not in self._SKIP_KEYS
+        }
+        if extra_fields:
+            pairs = " ".join(f"{k}={v}" for k, v in extra_fields.items())
+            record.msg = f"{record.msg} | {pairs}"
+        return super().format(record)
+
+
+for _h in logging.root.handlers:
+    _h.setFormatter(
+        _StructuredFormatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    )
+
 logger = logging.getLogger(__name__)
 
 
