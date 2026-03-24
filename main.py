@@ -4,6 +4,7 @@ import asyncio
 import logging
 import signal
 
+from application.context import ContextResolver
 from application.orchestrator import Orchestrator
 from config import Settings
 from engines.moderation import ModerationEngine
@@ -61,7 +62,11 @@ async def main() -> None:
     moderation_engine = ModerationEngine()
 
     # Application
-    orchestrator = Orchestrator(moderation_engine=moderation_engine)
+    context_resolver = ContextResolver(session_factory=session_factory)
+    orchestrator = Orchestrator(
+        moderation_engine=moderation_engine,
+        context_resolver=context_resolver,
+    )
 
     # Transport
     poller = Poller(
