@@ -12,6 +12,7 @@ class Settings:
     """
 
     telegram_bot_token: str
+    database_url: str
     polling_timeout: int = 30
     polling_retry_delay: float = 5.0
 
@@ -21,8 +22,14 @@ class Settings:
         if not token:
             raise RuntimeError("TELEGRAM_BOT_TOKEN environment variable is required")
 
+        database_url = os.environ.get("DATABASE_URL", "")
+        if not database_url:
+            raise RuntimeError("DATABASE_URL environment variable is required")
+
         return cls(
             telegram_bot_token=token,
+            database_url=database_url,
             polling_timeout=int(os.environ.get("POLLING_TIMEOUT", "30")),
             polling_retry_delay=float(os.environ.get("POLLING_RETRY_DELAY", "5.0")),
         )
+

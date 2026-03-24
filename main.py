@@ -7,6 +7,7 @@ import signal
 from application.orchestrator import Orchestrator
 from config import Settings
 from engines.moderation import ModerationEngine
+from infrastructure.db.session import build_engine, build_session_factory
 from infrastructure.executor import ActionExecutor
 from infrastructure.telegram_client import TelegramClient
 from transport.poller import Poller
@@ -47,6 +48,11 @@ logger = logging.getLogger(__name__)
 async def main() -> None:
     settings = Settings.from_env()
 
+    # Database
+    engine = build_engine(settings.database_url)
+    session_factory = build_session_factory(engine)
+    logger.info("Database session factory ready")
+
     # Infrastructure
     telegram_client = TelegramClient(bot_token=settings.telegram_bot_token)
     executor = ActionExecutor(telegram_client=telegram_client)
@@ -75,9 +81,11 @@ async def main() -> None:
         logger.info("Starting bot…")
         await poller.run()
     finally:
+        engine.dispose()
         await telegram_client.close()
         logger.info("Bot stopped.")
 
 
 if __name__ == "__main__":
     asyncio.run(main())
+
