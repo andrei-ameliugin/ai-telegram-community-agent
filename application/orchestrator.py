@@ -8,6 +8,8 @@ from engines.moderation import ModerationEngine
 
 logger = logging.getLogger(__name__)
 
+_COMPONENT = "orchestrator"
+
 
 class Orchestrator:
     """Central coordination layer.
@@ -22,20 +24,29 @@ class Orchestrator:
     def handle_event(self, event: MessageCreatedEvent) -> Decision:
         """Evaluate an event through the engine pipeline and return a decision."""
         logger.info(
-            "Processing event: correlation_id=%s, chat_id=%d, user_id=%d",
-            event.correlation_id,
-            event.chat_id,
-            event.user_id,
+            "Event received",
+            extra={
+                "component": _COMPONENT,
+                "correlation_id": event.correlation_id,
+                "event_type": "MessageCreatedEvent",
+                "chat_id": event.chat_id,
+                "user_id": event.user_id,
+                "message_id": event.message_id,
+            },
         )
 
         decision = self._moderation_engine.evaluate(event)
 
         logger.info(
-            "Decision: outcome=%s, actions=%d, reason=%s, correlation_id=%s",
-            decision.outcome.value,
-            len(decision.actions),
-            decision.reason,
-            event.correlation_id,
+            "Decision produced",
+            extra={
+                "component": _COMPONENT,
+                "correlation_id": event.correlation_id,
+                "outcome": decision.outcome.value,
+                "action_count": len(decision.actions),
+                "reason": decision.reason,
+                "requires_approval": decision.requires_approval,
+            },
         )
 
         return decision
